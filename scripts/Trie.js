@@ -85,7 +85,6 @@ class Trie {
     }
   }
 
-
   select(str){
     let currentNode = this.root;
 

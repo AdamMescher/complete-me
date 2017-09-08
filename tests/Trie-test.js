@@ -5,8 +5,6 @@ const text = "/usr/share/dict/words";
 const dictionary = fs.readFileSync(text).toString().trim().split('\n');
 const { assert, expect, should } = require( 'chai' );
 
-console.log(dictionary);
-
 describe( 'TRIE',() => {
 
   let trie;
