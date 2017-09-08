@@ -1,5 +1,6 @@
 # complete-me
 
+Complete-Me is a project that takes a deep dive into the prefix trie data structure. It was fascinating to learn about linked and doubly linked lists, binary trees, and binary search trees along the way. 
 
 ### Requirements
 
