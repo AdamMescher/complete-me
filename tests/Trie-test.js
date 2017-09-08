@@ -1,6 +1,11 @@
 const TrieNode = require('../scripts/TrieNode');
-const Trie = require('../scripts/Trie')
+const Trie = require('../scripts/Trie');
+const fs = require('fs');
+const text = "/usr/share/dict/words";
+const dictionary = fs.readFileSync(text).toString().trim().split('\n');
 const { assert, expect, should } = require( 'chai' );
+
+console.log(dictionary);
 
 describe( 'TRIE',() => {
 
@@ -104,24 +109,31 @@ describe( 'TRIE',() => {
   });
 
   describe('POPULATE', () => {
-    it('should add one word', () => {
+    it('should be able to add one word to the tree', () => {
       let test = ['the'];
       trie.populate(test);
       let suggested = trie.suggest('the')
       expect(JSON.stringify(suggested)).to.equal('["the"]')
     });
 
-    it('should not add duplicate words', () => {
-
+    it('should not add duplicate words to the trie', () => {
+      let test = ['the', 'the', 'the'];
+      trie.populate(test);
+      let suggested = trie.suggest('the');
+      expect(JSON.stringify(suggested)).to.equal('["the"]')
     });
 
-    it('should add multiple words', () => {
-
+    it('should add multiple words to the trie', () => {
+      let test = ['a', 'at', 'ate'];
+      trie.populate(test);
+      let suggested = trie.suggest('a');
+      expect(JSON.stringify(suggested)).to.equal('["a","at","ate"]');
     });
 
-    it('should be able to import dictionarty', () => {
-
-    });
+    it('should be able to import dictionarty', function() {
+      trie.populate(dictionary);
+      expect(trie.count() ).to.equal(235886);
+    }).timeout(4000);
   });
 
 });
