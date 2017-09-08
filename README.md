@@ -23,3 +23,7 @@ The common gripe about autocomplete systems is that they give us suggestions tha
 A solution to this problem is to “train” the completion dictionary over time based on the user’s actual selections. So, if a user consistently selects “pizza” in response to completions for “pizz”, it probably makes sense to recommend that as their first suggestion.
 
 Your library should support a select method which takes a substring and the selected suggestion. You will need to record this selection in your trie and use it to influence future suggestions.
+
+#### Phase 5
+
+Package your complete-me trie in a node module so that you can import it into future projects.
