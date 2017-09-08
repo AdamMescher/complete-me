@@ -7,7 +7,7 @@ class Trie {
   }
 
   count(){
-    return this.length;
+    return this.counter;
   }
 
   insert(word) {
