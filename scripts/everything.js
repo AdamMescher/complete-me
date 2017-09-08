@@ -1,4 +1,17 @@
-const TrieNode = require ('./TrieNode');
+const fs = require('fs');
+const text = "/usr/share/dict/words";
+const dictionary = fs.readFileSync(text).toString().trim().split('\n');
+
+console.log(dictionary.indexOf('ate'));
+
+class TrieNode {
+  constructor(val){
+    this.value = val;
+    this.children = {};
+    this.isComplete = false;
+    this.frequency = 0;
+  }
+}
 
 class Trie {
   constructor(){
@@ -7,12 +20,11 @@ class Trie {
   }
 
   count(){
-    return this.length;
+    return this.counter;
   }
 
   insert(word) {
     let currentNode = this.root;
-
     for (let i = 0; i < word.length; i++) {
       if( word[i] in currentNode.children === false){
         currentNode.children[ word[i] ] = new TrieNode( word[i] );
@@ -21,11 +33,8 @@ class Trie {
         currentNode = currentNode.children[ word[i] ];
       }
     }
-
-    if(!currentNode.isComplete && word !== ''){
-      currentNode.isComplete = true;
-      this.counter++;
-    }
+    currentNode.isComplete = true;
+    this.counter++;
   }
 
   suggest(str){
@@ -34,7 +43,7 @@ class Trie {
     let currentNode = this.root;
     let currentString = '';
 
-    findLastNodeOfStringInTrieAndConcatenateString();
+    findLastNodeOfStringInTrie();
 
     if (currentNode.isComplete) {
       completeObjectList.push({word: currentString, frequency: currentNode.frequency});
@@ -62,11 +71,13 @@ class Trie {
       }
     }
 
-    function findLastNodeOfStringInTrieAndConcatenateString(){
+    function findLastNodeOfStringInTrie(){
       for (var i = 0; i < str.length; i++) {
         if (str[i] in currentNode.children === true) {
           currentNode = currentNode.children[ str[i] ];
           currentString += str[i];
+        } else {
+          return -1;
         }
       }
     }
@@ -78,21 +89,22 @@ class Trie {
     completeObjectList.forEach( (element) => {
       sorted.push(element.word)
     })
-    if(!sorted.length){
-      return - 1;
-    } else {
-      return sorted;
-    }
+    return sorted;
   }
 
+  populate(list){
+    list.forEach( (e) => {
+      this.insert(e);
+    })
+  }
 
   select(str){
     let currentNode = this.root;
 
-    findLastNodeOfStringInTrieAndConcatenateString();
+    findLastNodeOfStringInTrie();
     currentNode.frequency++;
 
-    function findLastNodeOfStringInTrieAndConcatenateString(){
+    function findLastNodeOfStringInTrie(){
       for (var i = 0; i < str.length; i++) {
         if (str[i] in currentNode.children === true) {
           currentNode = currentNode.children[ str[i] ];
@@ -102,12 +114,37 @@ class Trie {
       }
     }
   }
-
-  populate(list){
-    list.forEach( (e) => {
-      this.insert(e);
-    });
-  }
 }
 
-module.exports = Trie;
+let trie = new Trie();
+
+let test = ['ate', 'at', 'a'];
+
+trie.populate(dictionary);
+
+let suggested = trie.suggest('yello');
+
+// console.log(suggested);
+// console.log(trie.root.children.a.children.t);
+
+// let sug = trie.suggest('A');
+// let suggested = trie.suggest('a');
+// let suggestion = trie.suggest('ba');
+
+// trie.insert('Adam')
+// trie.insert('at');
+// trie.insert('ate');
+// trie.insert('atm');
+// trie.insert('Athlete');
+// trie.insert('att');
+// trie.insert('adam');
+// trie.insert('baby');
+
+// trie.insert('baby');
+// trie.insert('cat');
+// trie.insert('category');
+// trie.insert('dog');
+
+// console.log(sug);
+// console.log(suggested);
+// console.log(suggestion);

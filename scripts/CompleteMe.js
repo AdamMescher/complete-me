@@ -1,14 +1,22 @@
-class CompleteMe {
-  constructor(){
+const TrieNode = require('./TrieNode');
+const Trie = require('./Trie');
+const text = "/usr/share/dict/words";
 
-  }
+let trie = new Trie();
 
-  insert(){}
+let test = ['a', 'at', 'ate'];
 
-  count(){
-    return this.length;
-  }
+trie.populate(test);
+// trie.insert('bat');
+// trie.insert('cat');
+// trie.insert('dog');
 
-}
+let suggested = trie.suggest('a');
 
-module.exports = CompleteMe
+console.log(suggested);
+
+trie.select('ate');
+
+let selected = trie.suggest('a');
+
+console.log(selected);
