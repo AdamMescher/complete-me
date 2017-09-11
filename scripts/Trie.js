@@ -35,6 +35,7 @@ class Trie {
     let currentString = '';
 
     findLastNodeOfStringInTrieAndConcatenateString();
+    // console.log(currentNode);
 
     if (currentNode.isComplete) {
       completeObjectList.push({word: currentString, frequency: currentNode.frequency});
@@ -51,10 +52,6 @@ class Trie {
         completeObjectList.push( {word: string, frequency: node.frequency} );
       }
 
-      if(!Object.keys(node.children).length) {
-        return '';
-      }
-
       let keys = Object.keys(node.children);
       for (var i = 0; i < keys.length; i++) {
         let key = keys[i];
@@ -64,7 +61,9 @@ class Trie {
 
     function findLastNodeOfStringInTrieAndConcatenateString(){
       for (var i = 0; i < str.length; i++) {
-        if (str[i] in currentNode.children === true) {
+        if (str[i] in currentNode.children === false) {
+          return -1;
+        } else {
           currentNode = currentNode.children[ str[i] ];
           currentString += str[i];
         }
@@ -93,10 +92,10 @@ class Trie {
 
     function findLastNodeOfStringInTrieAndConcatenateString(){
       for (var i = 0; i < str.length; i++) {
-        if (str[i] in currentNode.children === true) {
-          currentNode = currentNode.children[ str[i] ];
-        } else {
+        if (str[i] in currentNode.children === false) {
           return -1;
+        } else {
+          currentNode = currentNode.children[ str[i] ];
         }
       }
     }
@@ -110,3 +109,9 @@ class Trie {
 }
 
 module.exports = Trie;
+
+let trie = new Trie();
+
+trie.insert('apple');
+
+console.log(trie.suggest('b'));
