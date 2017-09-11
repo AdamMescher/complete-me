@@ -38,11 +38,68 @@ describe( 'TRIE',() => {
     it('should not increase after duplicates are added', () => {
       trie.insert('word');
       trie.insert('word');
+      expect(trie.counter).to.equal(1);
     });
 
     it('should not increase after insertion of empty string', () => {
       trie.insert('');
       expect(trie.counter).to.equal(0);
+    });
+  });
+
+  describe('SUGGEST', () => {
+
+    it('should return a single letter, both lowercase and uppercase', () => {
+      trie.insert('a');
+      trie.insert('I');
+
+      let sug1 = trie.suggest('a');
+      let sug2 = trie.suggest('I');
+
+      expect( JSON.stringify(sug1) ).to.equal('["a"]');
+      expect( JSON.stringify(sug2) ).to.equal('["I"]');
+    });
+
+    it('should return a single word, both with a capital and lowercase first letter', () => {
+      trie.insert('Apple');
+      trie.insert('apple');
+
+      let sug1 = trie.suggest('Apple');
+      let sug2 = trie.suggest('apple');
+
+      expect( JSON.stringify(sug1) ).to.equal('["Apple"]');
+      expect( JSON.stringify(sug2) ).to.equal('["apple"]');
+    });
+
+    it('should return multiple words, both with a capital and lowercase first letter', () => {
+      trie.insert('Apple');
+      trie.insert('apple');
+      trie.insert('Adam');
+      trie.insert('adam');
+      trie.insert('Audi');
+      trie.insert('audi');
+
+      let sug1 = trie.suggest('A');
+      let sug2 = trie.suggest('a');
+
+      expect(JSON.stringify(sug1)).to.equal('["Apple","Adam","Audi"]');
+      expect(JSON.stringify(sug2)).to.equal('["apple","adam","audi"]');
+    });
+
+    it('should return an array of one word that matches input string', () => {
+      trie.insert('apple');
+      let suggested = trie.suggest('a');
+    });
+
+    it('should sort the array of returned words by frequency', () => {
+      trie.insert('a');
+      trie.insert('at');
+      trie.insert('ate');
+      trie.select('ate');
+
+      let suggested = trie.suggest('a');
+
+      expect( JSON.stringify(suggested) ).to.equal('["ate","a","at"]')
     });
   });
 
@@ -76,16 +133,6 @@ describe( 'TRIE',() => {
       let keys = Object.keys(trie.root.children.d.children.o.children)
       expect(JSON.stringify(keys)).to.equal('["o","g"]');
     });
-
-    it('should sort the array of returned words by frequency', () => {
-      trie.insert('a');
-      trie.insert('at');
-      trie.insert('ate');
-      trie.select('ate');
-
-      let suggested = trie.suggest('a');
-      expect( JSON.stringify(suggested) ).to.equal('["ate","a","at"]')
-    });
   });
 
   describe('SELECT', () => {
@@ -95,14 +142,6 @@ describe( 'TRIE',() => {
       expect(trie.root.children.q.children.u.children.a.children.d.frequency).to.equal(0);
       trie.select('quad');
       expect(trie.root.children.q.children.u.children.a.children.d.frequency).to.equal(1);
-    });
-
-    it('should return -1 if string is not present in trie', () => {
-      let suggested = trie.suggest('b');
-      expect(suggested).to.equal(-1)
-
-
-
     });
   });
 
@@ -133,5 +172,4 @@ describe( 'TRIE',() => {
       expect(trie.count() ).to.equal(235886);
     }).timeout(4000);
   });
-
 });
