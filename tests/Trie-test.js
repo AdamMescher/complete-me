@@ -66,7 +66,6 @@ describe( 'TRIE',() => {
 
       let sug1 = trie.suggest('Apple');
       let sug2 = trie.suggest('apple');
-
       expect( JSON.stringify(sug1) ).to.equal('["Apple"]');
       expect( JSON.stringify(sug2) ).to.equal('["apple"]');
     });

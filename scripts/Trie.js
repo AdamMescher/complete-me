@@ -109,9 +109,3 @@ class Trie {
 }
 
 module.exports = Trie;
-
-let trie = new Trie();
-
-trie.insert('apple');
-
-console.log(trie.suggest('b'));
